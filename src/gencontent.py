@@ -14,7 +14,9 @@ def extract_title(markdown: str) -> str:
     raise ValueError("Markdown must contain exactly one h1 header (a line starting with '# ')")
 
 
-def generate_page(from_path: str, template_path: str, dest_path: str) -> None:
+def generate_page(
+    from_path: str, template_path: str, dest_path: str, basepath: str = "/"
+) -> None:
     """Read markdown and template, convert markdown to HTML, fill template, write to dest_path."""
     print(f"Generating page from {from_path} to {dest_path} using {template_path}")
 
@@ -26,6 +28,11 @@ def generate_page(from_path: str, template_path: str, dest_path: str) -> None:
     title = extract_title(markdown)
 
     html_page = template.replace("{{ Title }}", title).replace("{{ Content }}", content_html)
+
+    # Rewrite absolute paths so they work under a base path (e.g. GitHub Pages /repo/)
+    if basepath != "/":
+        html_page = html_page.replace('href="/', f'href="{basepath}')
+        html_page = html_page.replace('src="/', f'src="{basepath}')
 
     dest = Path(dest_path)
     dest.parent.mkdir(parents=True, exist_ok=True)

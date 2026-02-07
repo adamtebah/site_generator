@@ -28,4 +28,4 @@ def copy_directory(src: str, dst: str) -> None:
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO, format="%(message)s")
     project_root = Path(__file__).resolve().parent.parent
-    copy_directory(str(project_root / "static"), str(project_root / "public"))
+    copy_directory(str(project_root / "static"), str(project_root / "docs"))
